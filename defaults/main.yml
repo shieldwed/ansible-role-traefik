@@ -1,0 +1,21 @@
+# Copyright 2016 Daniel Wilhelm
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+traefik_bin_path: /usr/bin/traefik
+traefik_version: v1.4.0-rc3
+traefik_hash: sha256:db4398cde8a84129ab9c36fdccbdf78ceac12928248191e42a23b97d6301e6d8
+traefik_binary_url: https://github.com/containous/traefik/releases/download/{{ traefik_version }}/traefik_linux-amd64
+
+traefik_systemd_unit: traefik.service.j2
+traefik_config_template: traefik.toml.j2

@@ -1,0 +1,21 @@
+---
+- name: install traefik
+  get_url: dest={{ traefik_bin_path }} checksum={{ traefik_hash }} owner=root group=root mode=0755
+    url={{ traefik_binary_url }}
+  notify:
+    - restart traefik
+
+- name: create systemd service unit
+  template: src={{ traefik_systemd_unit }} dest=/etc/systemd/system/traefik.service
+    owner=root group=root
+  notify:
+    - reload systemd
+    - restart traefik
+
+- name: copy traefik config
+  template: src={{ traefik_config_template }} dest=/etc/traefik.toml owner=root group=root
+  notify:
+    - restart traefik
+
+- name: create traefik work directory
+  file: path=/var/lib/traefik state=directory owner=root group=root mode=0750
