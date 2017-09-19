@@ -17,5 +17,5 @@ traefik_version: v1.4.0-rc3
 traefik_hash: sha256:db4398cde8a84129ab9c36fdccbdf78ceac12928248191e42a23b97d6301e6d8
 traefik_binary_url: https://github.com/containous/traefik/releases/download/{{ traefik_version }}/traefik_linux-amd64
 
-traefik_systemd_unit: traefik.service.j2
-traefik_config_template: traefik.toml.j2
+traefik_systemd_unit: traefik_default.service.j2
+traefik_config_template: traefik_docker.toml.j2
