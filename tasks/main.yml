@@ -12,6 +12,9 @@
     - reload systemd
     - restart traefik
 
+- name: enable traefik service
+  service: name=traefik enabled=yes
+
 - name: copy traefik config
   template: src={{ traefik_config_template }} dest=/etc/traefik.toml owner=root group=root
   notify:
