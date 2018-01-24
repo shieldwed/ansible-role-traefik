@@ -13,8 +13,8 @@
 # limitations under the License.
 ---
 traefik_bin_path: /usr/bin/traefik
-traefik_version: v1.5.0-rc3
-traefik_hash: sha256:2b4cc5b6c5755c216117db950af91280b361efb8cedc1102844a97f1f6cf2174
+traefik_version: v1.5.0
+traefik_hash: sha256:f5bad64d95377a890f7e04640f6356df41c7c196b317a0f8f76a952979dbea50
 traefik_binary_url: https://github.com/containous/traefik/releases/download/{{ traefik_version }}/traefik_linux-amd64
 
 traefik_systemd_unit: traefik_default.service.j2
