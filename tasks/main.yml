@@ -5,6 +5,9 @@
   notify:
     - restart traefik
 
+- name: create traefik user
+  user: name=traefik groups=docker system=yes shell=/bin/false create_home=no
+
 - name: create systemd service unit
   template: src={{ traefik_systemd_unit }} dest=/etc/systemd/system/traefik.service
     owner=root group=root
