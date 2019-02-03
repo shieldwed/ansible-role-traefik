@@ -8,6 +8,17 @@
 - name: create traefik user
   user: name=traefik groups=docker system=yes shell=/bin/false create_home=no
 
+- name: create traefik config directory
+  file: path={{ traefik_conf_path | dirname }} state=directory owner=traefik group=traefik mode=0750
+
+- name: create traefik acme directory
+  file: path={{ traefik_acme_path | dirname }} state=directory owner=traefik group=traefik mode=0750
+
+- name: copy traefik config
+  template: src={{ traefik_config_template }} dest={{ traefik_conf_path }} owner=root group=root
+  notify:
+    - restart traefik
+
 - name: create systemd service unit
   template: src={{ traefik_systemd_unit }} dest=/etc/systemd/system/traefik.service
     owner=root group=root
@@ -17,11 +28,4 @@
 
 - name: enable traefik service
   service: name=traefik enabled=yes
-
-- name: copy traefik config
-  template: src={{ traefik_config_template }} dest=/etc/traefik.toml owner=root group=root
-  notify:
-    - restart traefik
-
-- name: create traefik work directory
-  file: path=/var/lib/traefik state=directory owner=root group=root mode=0750
+  

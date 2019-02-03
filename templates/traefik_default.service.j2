@@ -4,7 +4,7 @@ Description=Traefik
 
 [Service]
 Type=notify
-ExecStart={{ traefik_bin_path }} --configFile=/etc/traefik.toml
+ExecStart={{ traefik_bin_path }} --configFile={{ traefik_conf_path }}
 Restart=always
 WatchdogSec=1s
 
