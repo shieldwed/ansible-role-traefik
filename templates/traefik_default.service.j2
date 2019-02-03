@@ -22,7 +22,7 @@ PrivateDevices=true
 ProtectKernelTunables=true
 ProtectControlGroups=true
 
-ReadWritePaths={{ traefik_acme_path }}
+ReadWritePaths={{ traefik_acme_path | dirname }}
 
 [Install]
 WantedBy=multi-user.target
