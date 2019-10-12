@@ -1,0 +1,34 @@
+---
+- name: create temporary folder path for traefik download
+  tempfile:
+    state: directory
+  register: traefik_tmp_unarchive
+
+- name: unarchive traefik download
+  unarchive:
+    remote_src: yes
+    src: "{{ traefik_tmp_download.path }}"
+    dest: "{{ traefik_tmp_unarchive.path }}"
+
+- name: always clean up unarchived folder
+  block:
+    - name: retrieve unarchived traefik checksum
+      stat:
+        path: "{{ traefik_tmp_unarchive.path }}/traefik"
+        checksum_algorithm: "{{ traefik_hash | regex_search('^(.*?)(?=:)') }}"
+        get_checksum: yes
+        get_mime: no
+        get_attributes: no
+      register: traefik_tmp_unarchive_stat
+      failed_when: traefik_tmp_unarchive_stat.stat.checksum is not defined
+
+    - name: handle unarchived traefik binary
+      include_tasks: x-executable.yml
+      vars:
+        traefik_binary_stat: "{{ traefik_tmp_unarchive_stat }}"
+
+  always:
+    - name: unlink unarchived folder
+      file:
+        path: "{{ traefik_tmp_unarchive.path }}"
+        state: absent

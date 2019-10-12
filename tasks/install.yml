@@ -1,0 +1,38 @@
+---
+- name: create temporary file path for traefik download
+  tempfile:
+    state: file
+    suffix: "{{ traefik_binary_url | splitext | last }}"
+  register: traefik_tmp_download
+
+- name: download traefik
+  get_url:
+    dest: "{{ traefik_tmp_download.path }}"
+    url: "{{ traefik_binary_url }}"
+    force: yes
+
+- name: always clean up downloaded file
+  block:
+    - name: retrieve downloaded file hash and MIME type
+      stat:
+        path: "{{ traefik_tmp_download.path }}"
+        checksum_algorithm: "{{ traefik_hash | regex_search('^(.*?)(?=:)') }}"
+        get_mime: yes
+        get_checksum: yes
+        get_attributes: no
+      register: traefik_tmp_stat
+      failed_when:
+        - traefik_tmp_stat.stat.checksum is not defined
+        - traefik_tmp_stat.stat.mimetype is not defined
+
+    - name: check and handle downloaded file MIME type
+      include_tasks: "{{ item }}"
+      with_items: "{{ traefik_tmp_stat.stat.mimetype | regex_search('(?<=/)[\\w-]+\\b') }}.yml"
+      vars:
+        traefik_binary_stat: "{{ traefik_tmp_stat }}"
+
+  always:
+    - name: unlink downloaded file
+      file:
+        path: "{{ traefik_tmp_download.path }}"
+        state: absent

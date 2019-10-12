@@ -1,9 +1,18 @@
 ---
+- name: retrieve current traefik installation
+  stat:
+    path: "{{ traefik_bin_path }}"
+    checksum_algorithm: "{{ traefik_hash | regex_search('^(.*?)(?=:)') }}"
+    get_checksum: yes
+    get_attributes: no
+    get_mime: no
+  register: traefik_bin_stat
+
 - name: install traefik
-  get_url: dest={{ traefik_bin_path }} checksum={{ traefik_hash }} owner=root group=root mode=0755
-    url={{ traefik_binary_url }}
-  notify:
-    - restart traefik
+  include_tasks: install.yml
+  when:
+    - not ansible_check_mode
+    - traefik_bin_stat.stat.checksum is not defined or traefik_bin_stat.stat.checksum != traefik_hash|regex_search('[a-fA-F0-9]+$')
 
 - name: create traefik user
   user: name=traefik groups=docker system=yes shell=/bin/false create_home=no
@@ -28,4 +37,3 @@
 
 - name: enable traefik service
   service: name=traefik enabled=yes
-  

@@ -1,0 +1,16 @@
+---
+- name: check checksum of downloaded file
+  fail:
+    msg: Checksum of downloaded file ({{ traefik_binary_stat.stat.checksum }}) doesn't match requirement
+  when: traefik_binary_stat.stat.checksum != traefik_hash|regex_search('[a-fA-F0-9]+$')
+
+- name: copy downloaded new version of traefik to target
+  copy:
+    remote_src: yes
+    src: "{{ traefik_binary_stat.stat.path }}"
+    dest: "{{ traefik_bin_path }}"
+    owner: root
+    group: root
+    mode: u=rwx,go=rx
+  notify:
+    - restart traefik
