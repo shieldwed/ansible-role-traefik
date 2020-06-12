@@ -4,14 +4,14 @@
     state: directory
   register: traefik_tmp_unarchive
 
-- name: unarchive traefik download
-  unarchive:
-    remote_src: yes
-    src: "{{ traefik_tmp_download.path }}"
-    dest: "{{ traefik_tmp_unarchive.path }}"
-
 - name: always clean up unarchived folder
   block:
+    - name: unarchive traefik download
+      unarchive:
+        remote_src: yes
+        src: "{{ traefik_tmp_download.path }}"
+        dest: "{{ traefik_tmp_unarchive.path }}"
+
     - name: retrieve unarchived traefik checksum
       stat:
         path: "{{ traefik_tmp_unarchive.path }}/traefik"

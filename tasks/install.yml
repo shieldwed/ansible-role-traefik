@@ -5,14 +5,14 @@
     suffix: "{{ traefik_binary_url | splitext | last }}"
   register: traefik_tmp_download
 
-- name: download traefik
-  get_url:
-    dest: "{{ traefik_tmp_download.path }}"
-    url: "{{ traefik_binary_url }}"
-    force: yes
-
 - name: always clean up downloaded file
   block:
+    - name: download traefik
+      get_url:
+        dest: "{{ traefik_tmp_download.path }}"
+        url: "{{ traefik_binary_url }}"
+        force: yes
+
     - name: retrieve downloaded file hash and MIME type
       stat:
         path: "{{ traefik_tmp_download.path }}"
