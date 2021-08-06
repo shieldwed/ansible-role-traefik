@@ -16,8 +16,8 @@ traefik_bin_path: /usr/bin/traefik
 traefik_conf_path: /etc/traefik/traefik.toml
 traefik_acme_path: /etc/traefik/acme.json
 
-traefik_version: v2.4.9
-traefik_hash: sha256:c7996ac788e5b5ee4d421c27c59236c5d05a2d1d223c01b07f12cf58147c57dd
+traefik_version: v2.4.13
+traefik_hash: sha256:f19cef7d450607719f675a41ecb801fd4e98d22cfc50ff69367d31b06d2b2b66
 traefik_binary_url: https://github.com/containous/traefik/releases/download/{{ traefik_version }}/traefik_{{ traefik_version }}_linux_amd64.tar.gz
 
 traefik_systemd_unit: traefik_default.service.j2
